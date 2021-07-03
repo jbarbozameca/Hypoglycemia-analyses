@@ -16,6 +16,11 @@ summary(data_hypoglycemia)
 View(data_hypoglycemia)
 attach(data_hypoglycemia)
 
+mean(data_hypoglycemia$`Edad Gestacional`)
+sd(data_hypoglycemia$`Edad Gestacional`)
+
+mean(data_hypoglycemia$`Peso del RN`)
+sd(data_hypoglycemia$`Peso del RN`)
 library(tableone)
 tabla1_hypoglycemia=CreateTableOne(data=data_hypoglycemia, strata = "Hipoglucemia neonatal")
 tabla2_hypoglycemia=print(tabla1_hypoglycemia,showAllLevels=T);tabla2_hypoglycemia
@@ -33,6 +38,46 @@ modelo3=glm(data_hypoglycemia$`Hipoglucemia neonatal`~
             
 library(sjPlot)
 tab_model(modelo3,show.p=T)
+
+
+# Gráficos de hipoglucemia
+### OBSERVAR GRÁFICOS CIRCULARES
+table1<-table(data_hypoglycemia$`Sexo del RN`)
+table1
+
+frec_sexoRN=table1
+pie(frec_sexoRN, 
+    labels = c("Mujer","Varón"),
+    col = c("red","green"), 
+    main="Hipoglucemia")
+
+### OBSERVAR HISTOGRAMAS
+library (Hmisc)
+hist(data_hypoglycemia$`Edad Gestacional`,
+     main = "Edad gestacional",
+     xlab="Edad gestacional en semanas")
+
+### OBSERVAR DIAGRAMA DE BARRAS
+table2<-table(data_hypoglycemia$`Hijo de Madre Diabética`,
+              data_hypoglycemia$`Hipoglucemia neonatal`)
+barra_imagen=table2
+barra_imagen
+colnames(barra_imagen)=c("Con hipoglucemia neonatal",
+                         "Sin hipoglucemia neonatal")
+rownames(barra_imagen)=c("Hijo de madre diabética",
+                         "No hijo de madre diabética") 
+barplot(barra_imagen,
+        legend=TRUE,
+        main = "Hijos de madre diabética con hipoglucemia neonatal")
+
+
+### DIAGRAMA DE CAJAS
+boxplot(data_hypoglycemia$`Peso del RN`~data_hypoglycemia$`Hipoglucemia neonatal`,
+        col="lightblue",
+        main="Peso de los niños según frecuencia de hipoglucemia", 
+        names=c("Con hipoglucemia neonatal",
+                "Sin hipoglucemia neonatal"))
+
 
 
 
